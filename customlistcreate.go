@@ -10,6 +10,17 @@ func CustomListCreate(name string, desc string, debugflag bool){
 		os.Exit(1)
 	}
 	apikey := "Token " + os.Getenv("ATCKEY")
+	var urlstub string
+	if os.Getenv("ATCENV") == "preprod" {
+		urlstub = "www-test."
+	}
+	if os.Getenv("ATCENV") == "prod" {
+		urlstub = ""
+	}
+	if os.Getenv("ATCENV") == "" {
+		urlstub = ""
+	}
+	url := "https://" + urlstub + "csp.infoblox.com/api/atcfw/v1/custom_list"
 	body := "{\"name\":\"" + name + "\", \"description\":\"" + desc + "\"}"
 	client1 := resty.New()
 	if debugflag{
@@ -18,7 +29,7 @@ func CustomListCreate(name string, desc string, debugflag bool){
 	resp, err := client1.R().
 		SetHeaders(map[string]string{"Content-Type": "application/json", "Authorization": apikey}).
 		SetBody(body).
-		Post("https://www-test.csp.infoblox.com/api/atcfw/v1/custom_list")
+		Post(url)
 	fmt.Printf("\nError: %v", err)
 	fmt.Printf("\nResponse Status Code: %v", resp.StatusCode())
 	fmt.Printf("\nResponse Status: %v", resp.Status())
