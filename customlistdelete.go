@@ -20,7 +20,7 @@ func CustomListDelete(id string, debugflag bool){
 	if os.Getenv("ATCENV") == "" {
 		urlstub = ""
 	}
-	url := "https://" + urlstub + "csp.infoblox.com/api/atcfw/v1/custom_list" + id
+	url := "https://" + urlstub + "csp.infoblox.com/api/atcfw/v1/custom_list/" + id
 	client1 := resty.New()
 	if debugflag{
 		client1.SetDebug(true)
