@@ -10,8 +10,18 @@ func CustomListItemAdd(id string, fqdn string, debugflag bool){
 		os.Exit(1)
 	}
 	apikey := "Token " + os.Getenv("ATCKEY")
+	var urlstub string
+	if os.Getenv("ATCENV") == "preprod" {
+		urlstub = "www-test."
+	}
+	if os.Getenv("ATCENV") == "prod" {
+		urlstub = ""
+	}
+	if os.Getenv("ATCENV") == "" {
+		urlstub = ""
+	}
+	url := "https://" + urlstub + "csp.infoblox.com/api/atcfw/v1/custom_list" + id + "/items"
 	body := "{\"items\":[\"" + fqdn + "\"]}"
-	url := "https://www-test.csp.infoblox.com/api/atcfw/v1/custom_list/" + id + "/items"
 	client1 := resty.New()
 	if debugflag{
 		client1.SetDebug(true)
